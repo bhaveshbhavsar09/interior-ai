@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Interior Designer</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Header -->
+  <header>
+    <div class="logo">🏠 Smart Interiors</div>
+    <nav>
+      <ul>
+        <li><a href="#">Home</a></li>
+        <li><a href="#">Suggestions</a></li>
+        <li><a href="#">Gallery</a></li>
+        <li><a href="#">Contact</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <!-- Hero -->
+  <section class="hero">
+    <h1>AI-Powered Interior Suggestions</h1>
+    <p>Transform your home with smart design ideas</p>
+  </section>
+
+  <!-- Input -->
+  <section class="input-section">
+    <label for="room">Choose a room:</label>
+    <select id="room">
+      <option value="living">Living Room</option>
+      <option value="bedroom">Bedroom</option>
+      <option value="kitchen">Kitchen</option>
+      <option value="office">Office</option>
+    </select>
+    <button onclick="getSuggestion()">Suggest Interior</button>
+    <button onclick="showGallery()">Show Gallery</button>
+  </section>
+
+  <!-- Output -->
+  <section class="output-section">
+    <h2>Suggestion:</h2>
+    <p id="suggestion-text">Your AI suggestion will appear here...</p>
+    <div id="suggestion-image"></div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <p>&copy; 2026 Smart Interiors | Designed by Bhavesh</p>
+    <p>Follow us: 🌐 Instagram | 📘 Facebook | 🐦 Twitter</p>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
