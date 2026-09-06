@@ -142,6 +142,133 @@ button:active {
   transform: scale(1.02);
 }
 
+.assistant-section {
+  max-width: 980px;
+  margin: 3rem auto;
+  padding: 0 2rem;
+}
+
+.assistant-heading {
+  margin-bottom: 1.25rem;
+}
+
+.eyebrow {
+  margin: 0 0 0.35rem;
+  color: #3498db;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.assistant-heading h2 {
+  margin: 0;
+  color: #1a1a2e;
+  font-size: 1.8rem;
+}
+
+.assistant-heading p:last-child {
+  margin: 0.5rem 0 0;
+  color: #5b6267;
+}
+
+.assistant-panel {
+  overflow: hidden;
+  border: 1px solid #dfe4e8;
+  border-radius: 10px;
+  background: #fff;
+  box-shadow: 0 10px 28px rgba(26, 26, 46, 0.08);
+}
+
+.chat-messages {
+  display: flex;
+  min-height: 180px;
+  max-height: 360px;
+  flex-direction: column;
+  gap: 0.8rem;
+  overflow-y: auto;
+  padding: 1.25rem;
+  background: #f6f8fa;
+}
+
+.chat-message {
+  max-width: 78%;
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  color: #2d3436;
+  font-size: 0.95rem;
+}
+
+.chat-message.assistant {
+  align-self: flex-start;
+  background: #e5eef5;
+}
+
+.chat-message.user {
+  align-self: flex-end;
+  background: #3498db;
+  color: #fff;
+}
+
+.quick-prompts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  padding: 1rem 1.25rem 0;
+}
+
+.quick-prompts button {
+  margin: 0;
+  padding: 0.5rem 0.8rem;
+  border: 1px solid #c9dce8;
+  background: #fff;
+  color: #23698f;
+  font-size: 0.85rem;
+}
+
+.quick-prompts button:hover {
+  background: #edf7fc;
+  box-shadow: none;
+  transform: none;
+}
+
+.chat-form {
+  display: flex;
+  gap: 0.75rem;
+  padding: 1rem 1.25rem 1.25rem;
+}
+
+.chat-form input {
+  min-width: 0;
+  flex: 1;
+  padding: 0.75rem 0.9rem;
+  border: 1px solid #cfd7dc;
+  border-radius: 5px;
+  color: #2d3436;
+  font: inherit;
+}
+
+.chat-form input:focus {
+  outline: 2px solid rgba(52, 152, 219, 0.3);
+  border-color: #3498db;
+}
+
+.chat-form button {
+  flex-shrink: 0;
+  margin: 0;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
 .image-gallery {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -171,4 +298,31 @@ footer {
   padding: 1.5rem 2rem;
   margin-top: 3rem;
   font-size: 0.9rem;
+}
+
+@media (max-width: 640px) {
+  header {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  nav ul {
+    flex-wrap: wrap;
+    gap: 0.75rem 1rem;
+    margin: 0;
+    padding: 0;
+  }
+
+  .assistant-section {
+    padding: 0 1rem;
+  }
+
+  .chat-form {
+    flex-direction: column;
+  }
+
+  .chat-form button {
+    width: 100%;
+  }
 }

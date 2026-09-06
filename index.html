@@ -12,22 +12,23 @@
     <div class="logo">🏠 Smart Interiors</div>
     <nav>
       <ul>
-        <li><a href="#">Home</a></li>
-        <li><a href="#">Suggestions</a></li>
-        <li><a href="#">Gallery</a></li>
-        <li><a href="#">Contact</a></li>
+        <li><a href="#home">Home</a></li>
+        <li><a href="#suggestions">Suggestions</a></li>
+        <li><a href="#gallery">Gallery</a></li>
+        <li><a href="#assistant">AI Assistant</a></li>
+        <li><a href="#contact">Contact</a></li>
       </ul>
     </nav>
   </header>
 
   <!-- Hero -->
-  <section class="hero">
+  <section class="hero" id="home">
     <h1>AI-Powered Interior Suggestions</h1>
     <p>Transform your home with smart design ideas</p>
   </section>
 
   <!-- Input -->
-  <section class="input-section">
+  <section class="input-section" id="suggestions">
     <label for="room">Choose a room:</label>
     <select id="room">
       <option value="living">Living Room</option>
@@ -35,19 +36,40 @@
       <option value="kitchen">Kitchen</option>
       <option value="office">Office</option>
     </select>
-    <button onclick="getSuggestion()">Suggest Interior</button>
-    <button onclick="showGallery()">Show Gallery</button>
+    <button type="button" onclick="getSuggestion()">Suggest Interior</button>
+    <button type="button" onclick="showGallery()">Show Gallery</button>
   </section>
 
   <!-- Output -->
-  <section class="output-section">
+  <section class="output-section" id="gallery">
     <h2>Suggestion:</h2>
     <p id="suggestion-text">Your AI suggestion will appear here...</p>
     <div id="suggestion-image"></div>
   </section>
 
+  <section class="assistant-section" id="assistant">
+    <div class="assistant-heading">
+      <p class="eyebrow">Design companion</p>
+      <h2>Ask your AI interior assistant</h2>
+      <p>Get practical ideas for your <strong id="assistant-room">living room</strong>, from colors and layouts to lighting and storage.</p>
+    </div>
+    <div class="assistant-panel">
+      <div class="chat-messages" id="chat-messages" role="log" aria-live="polite" aria-label="AI assistant conversation"></div>
+      <div class="quick-prompts" aria-label="Suggested questions">
+        <button type="button" data-question="What colors would work well?">Color ideas</button>
+        <button type="button" data-question="How can I improve the lighting?">Lighting tips</button>
+        <button type="button" data-question="How can I make the room feel bigger?">Make it feel bigger</button>
+      </div>
+      <form class="chat-form" id="assistant-form">
+        <label class="sr-only" for="assistant-input">Ask the AI interior assistant</label>
+        <input id="assistant-input" type="text" placeholder="Ask about your room..." autocomplete="off" required>
+        <button type="submit">Ask assistant</button>
+      </form>
+    </div>
+  </section>
+
   <!-- Footer -->
-  <footer>
+  <footer id="contact">
     <p>&copy; 2026 Smart Interiors | Designed by Bhavesh</p>
     <p>Follow us: 🌐 Instagram | 📘 Facebook | 🐦 Twitter</p>
   </footer>
