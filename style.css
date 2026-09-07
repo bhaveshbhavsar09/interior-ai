@@ -322,6 +322,38 @@ footer p {
   margin: 0.4rem 0;
 }
 
+.about-content {
+  max-width: 760px;
+  margin: 3rem auto;
+  padding: 0 2rem;
+  text-align: center;
+}
+
+.about-content h2 {
+  color: #1a1a2e;
+  font-size: 1.8rem;
+  margin-bottom: 1rem;
+}
+
+.about-content p {
+  color: #5b6267;
+}
+
+.about-back-link {
+  display: inline-block;
+  margin-top: 1rem;
+  padding: 0.75rem 1.5rem;
+  border-radius: 5px;
+  background: #3498db;
+  color: #fff;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.about-back-link:hover {
+  background: #2980b9;
+}
+
 @media (max-width: 640px) {
   header {
     align-items: flex-start;
