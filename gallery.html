@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Smart Interiors | Home</title>
+  <title>Smart Interiors | Gallery</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -16,9 +16,9 @@
     <button class="mobile-menu-btn" id="mobile-menu-btn" aria-label="Toggle menu">☰</button>
     <nav id="main-nav">
       <ul>
-        <li><a href="index.html" style="color: var(--primary);">Home</a></li>
+        <li><a href="index.html">Home</a></li>
         <li><a href="planner.html">Room Planner</a></li>
-        <li><a href="gallery.html">Gallery</a></li>
+        <li><a href="gallery.html" style="color: var(--primary);">Gallery</a></li>
         <li><a href="assistant.html">AI Assistant</a></li>
         <li><a href="#" id="login-btn" class="nav-btn">Sign In</a></li>
         <li><button id="theme-toggle" class="icon-btn" aria-label="Toggle dark mode">🌙</button></li>
@@ -26,34 +26,13 @@
     </nav>
   </header>
 
-  <!-- Hero -->
-  <section class="hero animate-on-scroll" id="home">
-    <h1>AI-Powered Interior Suggestions</h1>
-    <p>Transform your home with smart, personalized design ideas in seconds.</p>
-    <br>
-    <a href="planner.html"><button>Start Designing Now</button></a>
-  </section>
-
-  <!-- Testimonials -->
-  <section class="testimonials animate-on-scroll" style="margin-top: 0;">
-    <h2>Loved by Thousands of Homeowners</h2>
-    <div class="testimonial-grid">
-      <div class="testimonial-card">
-        <div class="stars">★★★★★</div>
-        <p>"The AI suggested a mid-century modern look for my tiny apartment and completely transformed the space. The shoppable links saved me hours!"</p>
-        <div class="user">- Sarah J.</div>
-      </div>
-      <div class="testimonial-card">
-        <div class="stars">★★★★★</div>
-        <p>"I uploaded a picture of my messy office and got back a clean, minimalist design that I actually recreated. Highly recommended."</p>
-        <div class="user">- Mark T.</div>
-      </div>
-      <div class="testimonial-card">
-        <div class="stars">★★★★★</div>
-        <p>"The color palette extraction is brilliant. It helped me pick the exact paint colors for my new living room renovation."</p>
-        <div class="user">- Emily R.</div>
-      </div>
+  <!-- Gallery Section -->
+  <section class="output-section animate-on-scroll" style="margin-top: 4rem;">
+    <div class="output-header" style="justify-content: center;">
+      <h2>Design Inspiration Gallery</h2>
     </div>
+    <p style="margin-bottom: 2rem;">Explore beautifully crafted AI-generated rooms from around the world.</p>
+    <div id="gallery-container"></div>
   </section>
 
   <!-- Footer -->

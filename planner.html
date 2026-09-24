@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Smart Interiors | Room Planner</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Header -->
+  <header id="main-header">
+    <div class="logo">🏠 Smart Interiors</div>
+    <button class="mobile-menu-btn" id="mobile-menu-btn" aria-label="Toggle menu">☰</button>
+    <nav id="main-nav">
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="planner.html" style="color: var(--primary);">Room Planner</a></li>
+        <li><a href="gallery.html">Gallery</a></li>
+        <li><a href="assistant.html">AI Assistant</a></li>
+        <li><a href="#" id="login-btn" class="nav-btn">Sign In</a></li>
+        <li><button id="theme-toggle" class="icon-btn" aria-label="Toggle dark mode">🌙</button></li>
+      </ul>
+    </nav>
+  </header>
+
+  <!-- Input -->
+  <section class="input-section animate-on-scroll" id="suggestions">
+    <h2>Design Your Room</h2>
+    <p style="color: var(--text-color); margin-bottom: 2rem;">Select your preferences and let our AI generate the perfect space for you.</p>
+    <div class="filters">
+      <div class="filter-group">
+        <label for="room">Choose a room:</label>
+        <select id="room">
+          <option value="living">Living Room</option>
+          <option value="bedroom">Bedroom</option>
+          <option value="kitchen">Kitchen</option>
+          <option value="office">Office</option>
+        </select>
+      </div>
+      <div class="filter-group">
+        <label for="style">Design Style:</label>
+        <select id="style">
+          <option value="minimalist">Minimalist</option>
+          <option value="bohemian">Bohemian</option>
+          <option value="industrial">Industrial</option>
+          <option value="scandinavian">Scandinavian</option>
+          <option value="midcentury">Mid-Century Modern</option>
+        </select>
+      </div>
+      <div class="filter-group">
+        <label for="color">Color Palette:</label>
+        <select id="color">
+          <option value="warm">Warm Tones</option>
+          <option value="cool">Cool Tones</option>
+          <option value="monochromatic">Monochromatic</option>
+          <option value="pastel">Pastels</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="upload-area" id="upload-area">
+      <p>📁 Drag & Drop your room photo here or <span class="upload-link">Browse</span></p>
+      <input type="file" id="room-upload" hidden accept="image/*">
+    </div>
+
+    <button type="button" id="suggest-btn" onclick="getSuggestion()">✨ Generate Design</button>
+  </section>
+
+  <!-- Output -->
+  <section class="output-section" id="gallery" style="display: none;">
+    <div class="output-header">
+      <h2>Your AI Design</h2>
+      <button id="save-design-btn" class="icon-btn outline">❤️ Save Design</button>
+    </div>
+    
+    <div id="loading-state" style="display:none;">
+      <div class="spinner"></div>
+      <p>AI is generating your dream space...</p>
+    </div>
+
+    <div id="results-content">
+      <p id="suggestion-text">Your AI suggestion will appear here...</p>
+      
+      <div class="palette-container">
+        <div id="color-palette" class="color-palette"></div>
+      </div>
+
+      <div id="suggestion-image"></div>
+      
+      <div class="shoppable-container">
+        <h3>Shop the Look</h3>
+        <div id="shoppable-items" class="shoppable-items"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer id="contact">
+    <div class="footer-content">
+      <div class="footer-brand">
+        <h3>🏠 Smart Interiors</h3>
+        <p>AI-powered design for modern living. Elevate your space effortlessly.</p>
+      </div>
+      <div class="footer-links-col">
+        <h4>Product</h4>
+        <a href="planner.html">Room Planner</a>
+        <a href="gallery.html">Inspiration</a>
+        <a href="assistant.html">AI Assistant</a>
+      </div>
+      <div class="footer-links-col">
+        <h4>Company</h4>
+        <a href="#">About Us</a>
+        <a href="#">Careers</a>
+        <a href="#">Contact</a>
+      </div>
+      <div class="footer-newsletter">
+        <h4>Subscribe</h4>
+        <p>Get weekly design tips.</p>
+        <form class="newsletter-form" onsubmit="event.preventDefault(); showToast('Subscribed successfully! 🎉');">
+          <input type="email" placeholder="Email address" required>
+          <button type="submit">→</button>
+        </form>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2026 Smart Interiors | Designed by Bhavesh</p>
+      <div class="socials">
+        <a href="#">Instagram</a>
+        <a href="#">Facebook</a>
+        <a href="#">Twitter</a>
+      </div>
+    </div>
+  </footer>
+
+  <div id="toast-container"></div>
+  <script src="script.js"></script>
+</body>
+</html>

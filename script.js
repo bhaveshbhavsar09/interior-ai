@@ -1,23 +1,26 @@
+// Planner Logic
 function getSuggestion() {
-  const room = document.getElementById("room").value;
-  const style = document.getElementById("style").value;
-  const color = document.getElementById("color").value;
+  const room = document.getElementById("room")?.value || "living";
+  const style = document.getElementById("style")?.value || "minimalist";
+  const color = document.getElementById("color")?.value || "warm";
   
-  document.getElementById("gallery").style.display = "block";
-  document.getElementById("results-content").style.display = "none";
-  document.getElementById("loading-state").style.display = "block";
+  const gallery = document.getElementById("gallery");
+  const resultsContent = document.getElementById("results-content");
+  const loadingState = document.getElementById("loading-state");
   
-  // Simulate AI Loading
+  if(gallery) gallery.style.display = "block";
+  if(resultsContent) resultsContent.style.display = "none";
+  if(loadingState) loadingState.style.display = "block";
+  
   setTimeout(() => {
-    document.getElementById("loading-state").style.display = "none";
-    document.getElementById("results-content").style.display = "block";
+    if(loadingState) loadingState.style.display = "none";
+    if(resultsContent) resultsContent.style.display = "block";
     
     let suggestion = `A stunning ${style} ${room} featuring ${color} tones.`;
     let imagePaths = [];
     let colors = [];
     let products = [];
 
-    // Simple mock logic for images and colors based on selections
     if (room === "living") {
       suggestion += " Focus on a comfortable seating area, a statement rug, and ambient lighting.";
       imagePaths = ["https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=800&h=600&fit=crop", "https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?w=800&h=600&fit=crop"];
@@ -45,17 +48,21 @@ function getSuggestion() {
     else if (color === "monochromatic") colors = ["#ced4da", "#adb5bd", "#6c757d", "#495057"];
     else colors = ["#ffcbf2", "#f3c4fb", "#ecbcfd", "#e5b3fe"];
 
-    document.getElementById("suggestion-text").innerText = suggestion;
+    const suggestionText = document.getElementById("suggestion-text");
+    if(suggestionText) suggestionText.innerText = suggestion;
     
-    renderImages(imagePaths, `${style} ${room}`);
+    renderImages(imagePaths, `${style} ${room}`, "suggestion-image");
     renderPalette(colors);
     renderProducts(products);
     
-    document.getElementById("gallery").scrollIntoView({ behavior: "smooth", block: "start" });
+    if(gallery) gallery.scrollIntoView({ behavior: "smooth", block: "start" });
   }, 1200);
 }
 
-function renderImages(imagePaths, altPrefix) {
+function renderImages(imagePaths, altPrefix, targetId) {
+  const container = document.getElementById(targetId);
+  if (!container) return;
+  
   const gallery = document.createElement("div");
   gallery.className = "image-gallery";
   imagePaths.forEach((path, index) => {
@@ -65,12 +72,12 @@ function renderImages(imagePaths, altPrefix) {
     image.loading = "lazy";
     gallery.appendChild(image);
   });
-  const container = document.getElementById("suggestion-image");
   container.replaceChildren(gallery);
 }
 
 function renderPalette(colors) {
   const container = document.getElementById("color-palette");
+  if(!container) return;
   container.innerHTML = "";
   colors.forEach(hex => {
     const swatch = document.createElement("div");
@@ -85,6 +92,7 @@ function renderPalette(colors) {
 
 function renderProducts(products) {
   const container = document.getElementById("shoppable-items");
+  if(!container) return;
   container.innerHTML = "";
   products.forEach(p => {
     const card = document.createElement("div");
@@ -99,21 +107,16 @@ function renderProducts(products) {
   });
 }
 
-function showGallery() {
-  document.getElementById("gallery").style.display = "block";
-  document.getElementById("results-content").style.display = "block";
-  document.getElementById("loading-state").style.display = "none";
-  
-  document.getElementById("suggestion-text").innerText = "Explore our gallery of interiors!";
+function loadGalleryPage() {
   const galleryImages = [
     "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=800&h=600&fit=crop",
     "https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?w=800&h=600&fit=crop",
     "https://images.unsplash.com/photo-1600566753086-00f18fb6b3ea?w=800&h=600&fit=crop",
-    "https://images.unsplash.com/photo-1497366754035-f200968a6e72?w=800&h=600&fit=crop"
+    "https://images.unsplash.com/photo-1497366754035-f200968a6e72?w=800&h=600&fit=crop",
+    "https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?w=800&h=600&fit=crop",
+    "https://images.unsplash.com/photo-1615874959474-2d3d7e1a8f8a?w=800&h=600&fit=crop"
   ];
-  renderImages(galleryImages, "Interior");
-  document.getElementById("color-palette").innerHTML = "";
-  document.getElementById("shoppable-items").innerHTML = "";
+  renderImages(galleryImages, "Gallery Interior", "gallery-container");
 }
 
 // Assistant Logic
@@ -131,7 +134,8 @@ const assistantResponses = {
 };
 
 function getAssistantResponse(question) {
-  const room = document.getElementById("room").value;
+  const roomEl = document.getElementById("room");
+  const room = roomEl ? roomEl.value : "living";
   const normalizedQuestion = question.toLowerCase();
 
   if (normalizedQuestion.includes("color") || normalizedQuestion.includes("paint")) return assistantResponses.colors[room] || assistantResponses.colors.living;
@@ -140,14 +144,16 @@ function getAssistantResponse(question) {
   if (normalizedQuestion.includes("storage") || normalizedQuestion.includes("organize")) return assistantResponses.storage;
   if (normalizedQuestion.includes("budget") || normalizedQuestion.includes("cheap")) return assistantResponses.budget;
 
-  return `For your ${room}, start with a focal point and good lighting. Want help with colors, lighting, storage, or budget?`;
+  return `For your space, start with a focal point and good lighting. Want help with colors, lighting, storage, or budget?`;
 }
 
 function addChatMessage(message, sender) {
+  const chatMessages = document.getElementById("chat-messages");
+  if(!chatMessages) return;
   const messageElement = document.createElement("div");
   messageElement.className = `chat-message ${sender}`;
   messageElement.textContent = message;
-  document.getElementById("chat-messages").appendChild(messageElement);
+  chatMessages.appendChild(messageElement);
   messageElement.scrollIntoView({ behavior: "smooth", block: "nearest" });
 }
 
@@ -161,21 +167,16 @@ function askAssistant(question) {
   }, 600);
 }
 
-function updateAssistantRoom() {
-  const room = document.getElementById("room");
-  document.getElementById("assistant-room").textContent = room.options[room.selectedIndex].text.toLowerCase();
-}
-
-// Toast Notification
+// UI Utilities
 function showToast(message) {
   const container = document.getElementById("toast-container");
+  if(!container) return;
   const toast = document.createElement("div");
   toast.className = "toast";
   toast.textContent = message;
   container.appendChild(toast);
   
-  // Trigger reflow
-  void toast.offsetWidth;
+  void toast.offsetWidth; // Trigger reflow
   toast.classList.add("show");
   
   setTimeout(() => {
@@ -184,36 +185,39 @@ function showToast(message) {
   }, 3000);
 }
 
-// Scroll Animation Observer
 function initScrollAnimations() {
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        entry.target.classList.add("is-visible");
-      }
-    });
-  }, { threshold: 0.1 });
+  if (typeof IntersectionObserver !== 'undefined') {
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) entry.target.classList.add("is-visible");
+      });
+    }, { threshold: 0.1 });
 
-  document.querySelectorAll(".animate-on-scroll").forEach(el => observer.observe(el));
+    document.querySelectorAll(".animate-on-scroll").forEach(el => observer.observe(el));
+  }
 }
 
 function initTheme() {
   const savedTheme = localStorage.getItem("theme") || "light";
   document.documentElement.setAttribute("data-theme", savedTheme);
-  document.getElementById("theme-toggle").innerText = savedTheme === "dark" ? "☀️" : "🌙";
-  
-  document.getElementById("theme-toggle").addEventListener("click", () => {
-    const currentTheme = document.documentElement.getAttribute("data-theme");
-    const newTheme = currentTheme === "light" ? "dark" : "light";
-    document.documentElement.setAttribute("data-theme", newTheme);
-    localStorage.setItem("theme", newTheme);
-    document.getElementById("theme-toggle").innerText = newTheme === "dark" ? "☀️" : "🌙";
-  });
+  const themeToggle = document.getElementById("theme-toggle");
+  if (themeToggle) {
+    themeToggle.innerText = savedTheme === "dark" ? "☀️" : "🌙";
+    themeToggle.addEventListener("click", () => {
+      const currentTheme = document.documentElement.getAttribute("data-theme");
+      const newTheme = currentTheme === "light" ? "dark" : "light";
+      document.documentElement.setAttribute("data-theme", newTheme);
+      localStorage.setItem("theme", newTheme);
+      themeToggle.innerText = newTheme === "dark" ? "☀️" : "🌙";
+    });
+  }
 }
 
 function initUpload() {
   const uploadArea = document.getElementById("upload-area");
   const fileInput = document.getElementById("room-upload");
+  if (!uploadArea || !fileInput) return;
+  
   uploadArea.addEventListener("click", () => fileInput.click());
   fileInput.addEventListener("change", (e) => {
     if (e.target.files.length > 0) {
@@ -224,31 +228,19 @@ function initUpload() {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
-  const form = document.getElementById("assistant-form");
-  const input = document.getElementById("assistant-input");
-  const room = document.getElementById("room");
-
-  addChatMessage("Hi! I can help you shape the room with practical design ideas. What would you like to improve first?", "assistant");
-  form.addEventListener("submit", (e) => {
-    e.preventDefault();
-    askAssistant(input.value);
-    input.value = "";
-  });
-  document.querySelectorAll("[data-question]").forEach(btn => {
-    btn.addEventListener("click", () => askAssistant(btn.dataset.question));
-  });
-  room.addEventListener("change", updateAssistantRoom);
-  updateAssistantRoom();
-  
   initTheme();
-  initUpload();
   initScrollAnimations();
   
-  // Mobile menu toggle
-  document.getElementById("mobile-menu-btn").addEventListener("click", () => {
-    document.getElementById("main-nav").classList.toggle("active");
-  });
-  
+  // Mobile menu
+  const mobileMenuBtn = document.getElementById("mobile-menu-btn");
+  if (mobileMenuBtn) {
+    mobileMenuBtn.addEventListener("click", () => {
+      document.getElementById("main-nav").classList.toggle("active");
+    });
+  }
+
+  // Planner Init
+  initUpload();
   const saveBtn = document.getElementById("save-design-btn");
   if (saveBtn) {
     saveBtn.addEventListener("click", function() {
@@ -259,5 +251,25 @@ document.addEventListener("DOMContentLoaded", () => {
       this.style.borderColor = "#ef4444";
       showToast("✅ Design saved to your mood board!");
     });
+  }
+
+  // Assistant Init
+  const form = document.getElementById("assistant-form");
+  if (form) {
+    addChatMessage("Hi! I can help you shape the space with practical design ideas. What would you like to improve first?", "assistant");
+    form.addEventListener("submit", (e) => {
+      e.preventDefault();
+      const input = document.getElementById("assistant-input");
+      askAssistant(input.value);
+      input.value = "";
+    });
+    document.querySelectorAll("[data-question]").forEach(btn => {
+      btn.addEventListener("click", () => askAssistant(btn.dataset.question));
+    });
+  }
+
+  // Gallery Init
+  if (document.getElementById("gallery-container")) {
+    loadGalleryPage();
   }
 });
