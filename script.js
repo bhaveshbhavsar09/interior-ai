@@ -3,7 +3,6 @@ function getSuggestion() {
   const style = document.getElementById("style").value;
   const color = document.getElementById("color").value;
   
-  // Show UI elements
   document.getElementById("gallery").style.display = "block";
   document.getElementById("results-content").style.display = "none";
   document.getElementById("loading-state").style.display = "block";
@@ -52,15 +51,13 @@ function getSuggestion() {
     renderPalette(colors);
     renderProducts(products);
     
-    // Scroll to results
     document.getElementById("gallery").scrollIntoView({ behavior: "smooth", block: "start" });
-  }, 1200); // 1.2s fake delay
+  }, 1200);
 }
 
 function renderImages(imagePaths, altPrefix) {
   const gallery = document.createElement("div");
   gallery.className = "image-gallery";
-
   imagePaths.forEach((path, index) => {
     const image = document.createElement("img");
     image.src = path;
@@ -68,7 +65,6 @@ function renderImages(imagePaths, altPrefix) {
     image.loading = "lazy";
     gallery.appendChild(image);
   });
-
   const container = document.getElementById("suggestion-image");
   container.replaceChildren(gallery);
 }
@@ -97,7 +93,7 @@ function renderProducts(products) {
       <img src="${p.img}" alt="${p.name}">
       <h4>${p.name}</h4>
       <p>${p.price}</p>
-      <button>Buy Now</button>
+      <button onclick="showToast('Added ${p.name} to cart!')">Buy Now</button>
     `;
     container.appendChild(card);
   });
@@ -120,17 +116,18 @@ function showGallery() {
   document.getElementById("shoppable-items").innerHTML = "";
 }
 
+// Assistant Logic
 const assistantResponses = {
   colors: {
-    living: "Try warm white walls with olive, terracotta, or muted navy accents. Keep the largest furniture neutral so the room stays easy to refresh.",
-    bedroom: "Use calm tones such as soft sage, dusty blue, or warm white. Add contrast with one darker textile behind the bed rather than painting every wall.",
-    kitchen: "Pair warm white or pale greige cabinets with natural wood and one restrained accent color. A colored backsplash is an easy way to add personality without visual clutter.",
-    office: "Choose a quiet base like warm white or light gray, then add one focused accent such as forest green or clay. This keeps the background calm for work and video calls."
+    living: "Try warm white walls with olive, terracotta, or muted navy accents. Keep the largest furniture neutral.",
+    bedroom: "Use calm tones such as soft sage, dusty blue, or warm white. Add contrast with one darker textile.",
+    kitchen: "Pair warm white or pale greige cabinets with natural wood and one restrained accent color.",
+    office: "Choose a quiet base like warm white or light gray, then add one focused accent such as forest green."
   },
-  lighting: "Layer three types of light: bright overhead light for general use, a task light where you read or work, and a warm lamp or wall light for the evening. Aim for warm bulbs around 2700K to 3000K.",
-  bigger: "Keep a clear walking path, use furniture with visible legs, and repeat one light color through the walls and largest pieces. A large mirror opposite a window can also spread natural light through the room.",
-  storage: "Use the vertical space first: tall shelving, wall hooks, and storage baskets keep the floor open. Choose closed storage for visual calm and leave a small amount of display space for character.",
-  budget: "Start with layout and lighting before buying decor. Repositioning furniture, adding a rug, and changing bulbs usually create more impact per dollar than replacing large pieces."
+  lighting: "Layer three types of light: bright overhead, a task light, and a warm lamp for the evening.",
+  bigger: "Keep a clear walking path, use furniture with visible legs, and a large mirror opposite a window.",
+  storage: "Use the vertical space first: tall shelving, wall hooks, and storage baskets keep the floor open.",
+  budget: "Start with layout and lighting before buying decor. A new rug or bulbs create huge impact."
 };
 
 function getAssistantResponse(question) {
@@ -139,11 +136,11 @@ function getAssistantResponse(question) {
 
   if (normalizedQuestion.includes("color") || normalizedQuestion.includes("paint")) return assistantResponses.colors[room] || assistantResponses.colors.living;
   if (normalizedQuestion.includes("light") || normalizedQuestion.includes("bright")) return assistantResponses.lighting;
-  if (normalizedQuestion.includes("bigger") || normalizedQuestion.includes("small") || normalizedQuestion.includes("space")) return assistantResponses.bigger;
-  if (normalizedQuestion.includes("storage") || normalizedQuestion.includes("organize") || normalizedQuestion.includes("clutter")) return assistantResponses.storage;
-  if (normalizedQuestion.includes("budget") || normalizedQuestion.includes("cheap") || normalizedQuestion.includes("cost")) return assistantResponses.budget;
+  if (normalizedQuestion.includes("bigger") || normalizedQuestion.includes("small")) return assistantResponses.bigger;
+  if (normalizedQuestion.includes("storage") || normalizedQuestion.includes("organize")) return assistantResponses.storage;
+  if (normalizedQuestion.includes("budget") || normalizedQuestion.includes("cheap")) return assistantResponses.budget;
 
-  return `For your ${room} room, start with one clear focal point, two supporting textures, and a simple lighting layer. Tell me whether you want help with colors, lighting, storage, space, or budget.`;
+  return `For your ${room}, start with a focal point and good lighting. Want help with colors, lighting, storage, or budget?`;
 }
 
 function addChatMessage(message, sender) {
@@ -159,7 +156,6 @@ function askAssistant(question) {
   if (!trimmedQuestion) return;
   addChatMessage(trimmedQuestion, "user");
   
-  // Micro-animation fake typing delay
   setTimeout(() => {
     addChatMessage(getAssistantResponse(trimmedQuestion), "assistant");
   }, 600);
@@ -167,39 +163,62 @@ function askAssistant(question) {
 
 function updateAssistantRoom() {
   const room = document.getElementById("room");
-  const roomName = room.options[room.selectedIndex].text.toLowerCase();
-  document.getElementById("assistant-room").textContent = roomName;
+  document.getElementById("assistant-room").textContent = room.options[room.selectedIndex].text.toLowerCase();
 }
 
-// Theme toggling
+// Toast Notification
+function showToast(message) {
+  const container = document.getElementById("toast-container");
+  const toast = document.createElement("div");
+  toast.className = "toast";
+  toast.textContent = message;
+  container.appendChild(toast);
+  
+  // Trigger reflow
+  void toast.offsetWidth;
+  toast.classList.add("show");
+  
+  setTimeout(() => {
+    toast.classList.remove("show");
+    setTimeout(() => toast.remove(), 300);
+  }, 3000);
+}
+
+// Scroll Animation Observer
+function initScrollAnimations() {
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add("is-visible");
+      }
+    });
+  }, { threshold: 0.1 });
+
+  document.querySelectorAll(".animate-on-scroll").forEach(el => observer.observe(el));
+}
+
 function initTheme() {
   const savedTheme = localStorage.getItem("theme") || "light";
   document.documentElement.setAttribute("data-theme", savedTheme);
-  updateThemeIcon(savedTheme);
+  document.getElementById("theme-toggle").innerText = savedTheme === "dark" ? "☀️" : "🌙";
   
   document.getElementById("theme-toggle").addEventListener("click", () => {
     const currentTheme = document.documentElement.getAttribute("data-theme");
     const newTheme = currentTheme === "light" ? "dark" : "light";
     document.documentElement.setAttribute("data-theme", newTheme);
     localStorage.setItem("theme", newTheme);
-    updateThemeIcon(newTheme);
+    document.getElementById("theme-toggle").innerText = newTheme === "dark" ? "☀️" : "🌙";
   });
 }
 
-function updateThemeIcon(theme) {
-  const icon = theme === "dark" ? "☀️" : "🌙";
-  document.getElementById("theme-toggle").innerText = icon;
-}
-
-// Upload Area Mock
 function initUpload() {
   const uploadArea = document.getElementById("upload-area");
   const fileInput = document.getElementById("room-upload");
-  
   uploadArea.addEventListener("click", () => fileInput.click());
   fileInput.addEventListener("change", (e) => {
     if (e.target.files.length > 0) {
       uploadArea.innerHTML = `<p>✅ File <strong>${e.target.files[0].name}</strong> ready for AI magic!</p>`;
+      showToast("Room photo uploaded successfully!");
     }
   });
 }
@@ -210,31 +229,35 @@ document.addEventListener("DOMContentLoaded", () => {
   const room = document.getElementById("room");
 
   addChatMessage("Hi! I can help you shape the room with practical design ideas. What would you like to improve first?", "assistant");
-  form.addEventListener("submit", (event) => {
-    event.preventDefault();
+  form.addEventListener("submit", (e) => {
+    e.preventDefault();
     askAssistant(input.value);
     input.value = "";
-    input.focus();
   });
-  document.querySelectorAll("[data-question]").forEach((button) => {
-    button.addEventListener("click", () => {
-      askAssistant(button.dataset.question);
-    });
+  document.querySelectorAll("[data-question]").forEach(btn => {
+    btn.addEventListener("click", () => askAssistant(btn.dataset.question));
   });
   room.addEventListener("change", updateAssistantRoom);
   updateAssistantRoom();
   
   initTheme();
   initUpload();
+  initScrollAnimations();
   
-  // Save design mock
+  // Mobile menu toggle
+  document.getElementById("mobile-menu-btn").addEventListener("click", () => {
+    document.getElementById("main-nav").classList.toggle("active");
+  });
+  
   const saveBtn = document.getElementById("save-design-btn");
   if (saveBtn) {
     saveBtn.addEventListener("click", function() {
+      if (this.innerText.includes("Saved")) return;
       this.innerText = "❤️ Saved!";
-      this.style.background = "rgba(231, 76, 60, 0.1)";
-      this.style.color = "#e74c3c";
-      this.style.borderColor = "#e74c3c";
+      this.style.background = "rgba(239, 68, 68, 0.1)";
+      this.style.color = "#ef4444";
+      this.style.borderColor = "#ef4444";
+      showToast("✅ Design saved to your mood board!");
     });
   }
 });

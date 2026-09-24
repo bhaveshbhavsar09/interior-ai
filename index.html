@@ -3,33 +3,37 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>AI Interior Designer</title>
+  <title>Smart Interiors | Premium AI Design</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <!-- Header -->
-  <header>
+  <header id="main-header">
     <div class="logo">🏠 Smart Interiors</div>
-    <nav>
+    <button class="mobile-menu-btn" id="mobile-menu-btn" aria-label="Toggle menu">☰</button>
+    <nav id="main-nav">
       <ul>
         <li><a href="#home">Home</a></li>
         <li><a href="#suggestions">Room Planner</a></li>
         <li><a href="#gallery">Gallery</a></li>
         <li><a href="#assistant">AI Assistant</a></li>
-        <li><a href="#" id="login-btn">Sign In</a></li>
+        <li><a href="#" id="login-btn" class="nav-btn">Sign In</a></li>
         <li><button id="theme-toggle" class="icon-btn" aria-label="Toggle dark mode">🌙</button></li>
       </ul>
     </nav>
   </header>
 
   <!-- Hero -->
-  <section class="hero" id="home">
+  <section class="hero animate-on-scroll" id="home">
     <h1>AI-Powered Interior Suggestions</h1>
-    <p>Transform your home with smart design ideas</p>
+    <p>Transform your home with smart, personalized design ideas in seconds.</p>
   </section>
 
   <!-- Input -->
-  <section class="input-section" id="suggestions">
+  <section class="input-section animate-on-scroll" id="suggestions">
     <div class="filters">
       <div class="filter-group">
         <label for="room">Choose a room:</label>
@@ -98,7 +102,8 @@
     </div>
   </section>
 
-  <section class="assistant-section" id="assistant">
+  <!-- Assistant -->
+  <section class="assistant-section animate-on-scroll" id="assistant">
     <div class="assistant-heading">
       <p class="eyebrow">Design companion</p>
       <h2>Ask your AI interior assistant</h2>
@@ -119,18 +124,67 @@
     </div>
   </section>
 
+  <!-- Testimonials -->
+  <section class="testimonials animate-on-scroll">
+    <h2>Loved by Thousands of Homeowners</h2>
+    <div class="testimonial-grid">
+      <div class="testimonial-card">
+        <div class="stars">★★★★★</div>
+        <p>"The AI suggested a mid-century modern look for my tiny apartment and completely transformed the space. The shoppable links saved me hours!"</p>
+        <div class="user">- Sarah J.</div>
+      </div>
+      <div class="testimonial-card">
+        <div class="stars">★★★★★</div>
+        <p>"I uploaded a picture of my messy office and got back a clean, minimalist design that I actually recreated. Highly recommended."</p>
+        <div class="user">- Mark T.</div>
+      </div>
+      <div class="testimonial-card">
+        <div class="stars">★★★★★</div>
+        <p>"The color palette extraction is brilliant. It helped me pick the exact paint colors for my new living room renovation."</p>
+        <div class="user">- Emily R.</div>
+      </div>
+    </div>
+  </section>
+
   <!-- Footer -->
   <footer id="contact">
-    <nav class="footer-links" aria-label="Footer navigation">
-      <a href="#home">Home</a>
-      <a href="#suggestions">Room Planner</a>
-      <a href="#gallery">Inspiration</a>
-      <a href="#assistant">AI Assistant</a>
-      <a href="about.html">About Us</a>
-    </nav>
-    <p>&copy; 2026 Smart Interiors | Designed by Bhavesh</p>
-    <p>Follow us: 🌐 Instagram | 📘 Facebook | 🐦 Twitter</p>
+    <div class="footer-content">
+      <div class="footer-brand">
+        <h3>🏠 Smart Interiors</h3>
+        <p>AI-powered design for modern living. Elevate your space effortlessly.</p>
+      </div>
+      <div class="footer-links-col">
+        <h4>Product</h4>
+        <a href="#suggestions">Room Planner</a>
+        <a href="#gallery">Inspiration</a>
+        <a href="#assistant">AI Assistant</a>
+      </div>
+      <div class="footer-links-col">
+        <h4>Company</h4>
+        <a href="#">About Us</a>
+        <a href="#">Careers</a>
+        <a href="#">Contact</a>
+      </div>
+      <div class="footer-newsletter">
+        <h4>Subscribe</h4>
+        <p>Get weekly design tips.</p>
+        <form class="newsletter-form" onsubmit="event.preventDefault(); showToast('Subscribed successfully! 🎉');">
+          <input type="email" placeholder="Email address" required>
+          <button type="submit">→</button>
+        </form>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2026 Smart Interiors | Designed by Bhavesh</p>
+      <div class="socials">
+        <a href="#">Instagram</a>
+        <a href="#">Facebook</a>
+        <a href="#">Twitter</a>
+      </div>
+    </div>
   </footer>
+
+  <div id="toast-container"></div>
 
   <script src="script.js"></script>
 </body>
