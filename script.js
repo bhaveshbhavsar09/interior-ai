@@ -1,52 +1,60 @@
 function getSuggestion() {
   const room = document.getElementById("room").value;
-  let suggestion = "";
-  let imagePaths = [];
-
-  switch(room) {
-    case "living":
-      suggestion = "Modern sofa, marble accent wall, warm lighting.";
-      imagePaths = [
-        "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=800&h=600&fit=crop",
-        "https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?w=800&h=600&fit=crop",
-        "https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?w=800&h=600&fit=crop",
-        "https://images.unsplash.com/photo-1600573472550-8090b5e0745e?w=800&h=600&fit=crop"
-      ];
-      break;
-    case "bedroom":
-      suggestion = "Cozy layered bedding, plants, soft lighting.";
-      imagePaths = [
-        "https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?w=800&h=600&fit=crop",
-        "https://images.unsplash.com/photo-1615874959474-2d3d7e1a8f8a?w=800&h=600&fit=crop",
-        "https://images.unsplash.com/photo-1600210491892-03d54c0aaf87?w=800&h=600&fit=crop",
-        "https://images.unsplash.com/photo-1618220179428-22790b461013?w=800&h=600&fit=crop"
-      ];
-      break;
-    case "kitchen":
-      suggestion = "Marble island, sleek cabinets, pendant lights.";
-      imagePaths = [
-        "https://images.unsplash.com/photo-1600566753086-00f18fb6b3ea?w=800&h=600&fit=crop",
-        "https://images.unsplash.com/photo-1600585154526-990dced4db0d?w=800&h=600&fit=crop",
-        "https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?w=800&h=600&fit=crop",
-        "https://images.unsplash.com/photo-1600566753051-7b2c3c6f6d9b?w=800&h=600&fit=crop"
-      ];
-      break;
-    case "office":
-      suggestion = "Minimalist desk, ergonomic chair, natural light.";
-      imagePaths = [
-        "https://images.unsplash.com/photo-1497366754035-f200968a6e72?w=800&h=600&fit=crop",
-        "https://images.unsplash.com/photo-1497366216548-37526070297c?w=800&h=600&fit=crop",
-        "https://images.unsplash.com/photo-1497366811353-6870744d04b2?w=800&h=600&fit=crop",
-        "https://images.unsplash.com/photo-1524758631624-e2822e304c36?w=800&h=600&fit=crop"
-      ];
-      break;
-    default:
-      suggestion = "Select a room to get suggestions!";
-  }
-
-  document.getElementById("suggestion-text").innerText = suggestion;
+  const style = document.getElementById("style").value;
+  const color = document.getElementById("color").value;
   
-  renderImages(imagePaths, `${room} interior`);
+  // Show UI elements
+  document.getElementById("gallery").style.display = "block";
+  document.getElementById("results-content").style.display = "none";
+  document.getElementById("loading-state").style.display = "block";
+  
+  // Simulate AI Loading
+  setTimeout(() => {
+    document.getElementById("loading-state").style.display = "none";
+    document.getElementById("results-content").style.display = "block";
+    
+    let suggestion = `A stunning ${style} ${room} featuring ${color} tones.`;
+    let imagePaths = [];
+    let colors = [];
+    let products = [];
+
+    // Simple mock logic for images and colors based on selections
+    if (room === "living") {
+      suggestion += " Focus on a comfortable seating area, a statement rug, and ambient lighting.";
+      imagePaths = ["https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=800&h=600&fit=crop", "https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?w=800&h=600&fit=crop"];
+      products = [
+        {name: "Velvet Sofa", price: "$899", img: "https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=200"},
+        {name: "Abstract Rug", price: "$150", img: "https://images.unsplash.com/photo-1579656592043-a20d25a4aa4b?w=200"}
+      ];
+    } else if (room === "bedroom") {
+      suggestion += " Layered bedding, soft textures, and a calming atmosphere are key.";
+      imagePaths = ["https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?w=800&h=600&fit=crop", "https://images.unsplash.com/photo-1615874959474-2d3d7e1a8f8a?w=800&h=600&fit=crop"];
+      products = [
+        {name: "Linen Duvet Set", price: "$120", img: "https://images.unsplash.com/photo-1584100936595-c0654b355040?w=200"},
+        {name: "Bedside Lamp", price: "$45", img: "https://images.unsplash.com/photo-1507473885765-e6ed057f782c?w=200"}
+      ];
+    } else {
+      suggestion += " Functional layout with a cohesive aesthetic.";
+      imagePaths = ["https://images.unsplash.com/photo-1600566753086-00f18fb6b3ea?w=800&h=600&fit=crop"];
+      products = [
+        {name: "Modern Chair", price: "$199", img: "https://images.unsplash.com/photo-1506898667547-42e22a46e125?w=200"}
+      ];
+    }
+
+    if (color === "warm") colors = ["#d4a373", "#faedcd", "#fefae0", "#e9edc9"];
+    else if (color === "cool") colors = ["#caf0f8", "#90e0ef", "#00b4d8", "#0077b6"];
+    else if (color === "monochromatic") colors = ["#ced4da", "#adb5bd", "#6c757d", "#495057"];
+    else colors = ["#ffcbf2", "#f3c4fb", "#ecbcfd", "#e5b3fe"];
+
+    document.getElementById("suggestion-text").innerText = suggestion;
+    
+    renderImages(imagePaths, `${style} ${room}`);
+    renderPalette(colors);
+    renderProducts(products);
+    
+    // Scroll to results
+    document.getElementById("gallery").scrollIntoView({ behavior: "smooth", block: "start" });
+  }, 1200); // 1.2s fake delay
 }
 
 function renderImages(imagePaths, altPrefix) {
@@ -58,34 +66,58 @@ function renderImages(imagePaths, altPrefix) {
     image.src = path;
     image.alt = `${altPrefix} ${index + 1}`;
     image.loading = "lazy";
-    image.onerror = () => {
-      image.onerror = null;
-      image.src = `data:image/svg+xml;charset=UTF-8,${encodeURIComponent(
-        `<svg xmlns="http://www.w3.org/2000/svg" width="800" height="600" viewBox="0 0 800 600"><rect width="800" height="600" fill="#d9c7b8"/><text x="400" y="300" text-anchor="middle" fill="#3d3028" font-family="sans-serif" font-size="28">${altPrefix}</text></svg>`
-      )}`;
-    };
     gallery.appendChild(image);
   });
 
   const container = document.getElementById("suggestion-image");
   container.replaceChildren(gallery);
-  container.scrollIntoView({ behavior: "smooth", block: "start" });
+}
+
+function renderPalette(colors) {
+  const container = document.getElementById("color-palette");
+  container.innerHTML = "";
+  colors.forEach(hex => {
+    const swatch = document.createElement("div");
+    swatch.className = "color-swatch";
+    swatch.style.backgroundColor = hex;
+    const label = document.createElement("span");
+    label.innerText = hex;
+    swatch.appendChild(label);
+    container.appendChild(swatch);
+  });
+}
+
+function renderProducts(products) {
+  const container = document.getElementById("shoppable-items");
+  container.innerHTML = "";
+  products.forEach(p => {
+    const card = document.createElement("div");
+    card.className = "shop-card";
+    card.innerHTML = `
+      <img src="${p.img}" alt="${p.name}">
+      <h4>${p.name}</h4>
+      <p>${p.price}</p>
+      <button>Buy Now</button>
+    `;
+    container.appendChild(card);
+  });
 }
 
 function showGallery() {
+  document.getElementById("gallery").style.display = "block";
+  document.getElementById("results-content").style.display = "block";
+  document.getElementById("loading-state").style.display = "none";
+  
   document.getElementById("suggestion-text").innerText = "Explore our gallery of interiors!";
   const galleryImages = [
     "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=800&h=600&fit=crop",
     "https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?w=800&h=600&fit=crop",
     "https://images.unsplash.com/photo-1600566753086-00f18fb6b3ea?w=800&h=600&fit=crop",
-    "https://images.unsplash.com/photo-1497366754035-f200968a6e72?w=800&h=600&fit=crop",
-    "https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?w=800&h=600&fit=crop",
-    "https://images.unsplash.com/photo-1618220179428-22790b461013?w=800&h=600&fit=crop",
-    "https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?w=800&h=600&fit=crop",
-    "https://images.unsplash.com/photo-1524758631624-e2822e304c36?w=800&h=600&fit=crop"
+    "https://images.unsplash.com/photo-1497366754035-f200968a6e72?w=800&h=600&fit=crop"
   ];
-  
   renderImages(galleryImages, "Interior");
+  document.getElementById("color-palette").innerHTML = "";
+  document.getElementById("shoppable-items").innerHTML = "";
 }
 
 const assistantResponses = {
@@ -105,21 +137,11 @@ function getAssistantResponse(question) {
   const room = document.getElementById("room").value;
   const normalizedQuestion = question.toLowerCase();
 
-  if (normalizedQuestion.includes("color") || normalizedQuestion.includes("paint")) {
-    return assistantResponses.colors[room];
-  }
-  if (normalizedQuestion.includes("light") || normalizedQuestion.includes("bright")) {
-    return assistantResponses.lighting;
-  }
-  if (normalizedQuestion.includes("bigger") || normalizedQuestion.includes("small") || normalizedQuestion.includes("space")) {
-    return assistantResponses.bigger;
-  }
-  if (normalizedQuestion.includes("storage") || normalizedQuestion.includes("organize") || normalizedQuestion.includes("clutter")) {
-    return assistantResponses.storage;
-  }
-  if (normalizedQuestion.includes("budget") || normalizedQuestion.includes("cheap") || normalizedQuestion.includes("cost")) {
-    return assistantResponses.budget;
-  }
+  if (normalizedQuestion.includes("color") || normalizedQuestion.includes("paint")) return assistantResponses.colors[room] || assistantResponses.colors.living;
+  if (normalizedQuestion.includes("light") || normalizedQuestion.includes("bright")) return assistantResponses.lighting;
+  if (normalizedQuestion.includes("bigger") || normalizedQuestion.includes("small") || normalizedQuestion.includes("space")) return assistantResponses.bigger;
+  if (normalizedQuestion.includes("storage") || normalizedQuestion.includes("organize") || normalizedQuestion.includes("clutter")) return assistantResponses.storage;
+  if (normalizedQuestion.includes("budget") || normalizedQuestion.includes("cheap") || normalizedQuestion.includes("cost")) return assistantResponses.budget;
 
   return `For your ${room} room, start with one clear focal point, two supporting textures, and a simple lighting layer. Tell me whether you want help with colors, lighting, storage, space, or budget.`;
 }
@@ -135,15 +157,51 @@ function addChatMessage(message, sender) {
 function askAssistant(question) {
   const trimmedQuestion = question.trim();
   if (!trimmedQuestion) return;
-
   addChatMessage(trimmedQuestion, "user");
-  addChatMessage(getAssistantResponse(trimmedQuestion), "assistant");
+  
+  // Micro-animation fake typing delay
+  setTimeout(() => {
+    addChatMessage(getAssistantResponse(trimmedQuestion), "assistant");
+  }, 600);
 }
 
 function updateAssistantRoom() {
   const room = document.getElementById("room");
   const roomName = room.options[room.selectedIndex].text.toLowerCase();
   document.getElementById("assistant-room").textContent = roomName;
+}
+
+// Theme toggling
+function initTheme() {
+  const savedTheme = localStorage.getItem("theme") || "light";
+  document.documentElement.setAttribute("data-theme", savedTheme);
+  updateThemeIcon(savedTheme);
+  
+  document.getElementById("theme-toggle").addEventListener("click", () => {
+    const currentTheme = document.documentElement.getAttribute("data-theme");
+    const newTheme = currentTheme === "light" ? "dark" : "light";
+    document.documentElement.setAttribute("data-theme", newTheme);
+    localStorage.setItem("theme", newTheme);
+    updateThemeIcon(newTheme);
+  });
+}
+
+function updateThemeIcon(theme) {
+  const icon = theme === "dark" ? "☀️" : "🌙";
+  document.getElementById("theme-toggle").innerText = icon;
+}
+
+// Upload Area Mock
+function initUpload() {
+  const uploadArea = document.getElementById("upload-area");
+  const fileInput = document.getElementById("room-upload");
+  
+  uploadArea.addEventListener("click", () => fileInput.click());
+  fileInput.addEventListener("change", (e) => {
+    if (e.target.files.length > 0) {
+      uploadArea.innerHTML = `<p>✅ File <strong>${e.target.files[0].name}</strong> ready for AI magic!</p>`;
+    }
+  });
 }
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -165,4 +223,18 @@ document.addEventListener("DOMContentLoaded", () => {
   });
   room.addEventListener("change", updateAssistantRoom);
   updateAssistantRoom();
+  
+  initTheme();
+  initUpload();
+  
+  // Save design mock
+  const saveBtn = document.getElementById("save-design-btn");
+  if (saveBtn) {
+    saveBtn.addEventListener("click", function() {
+      this.innerText = "❤️ Saved!";
+      this.style.background = "rgba(231, 76, 60, 0.1)";
+      this.style.color = "#e74c3c";
+      this.style.borderColor = "#e74c3c";
+    });
+  }
 });

@@ -13,12 +13,11 @@
     <nav>
       <ul>
         <li><a href="#home">Home</a></li>
-        <li><a href="#suggestions">Suggestions</a></li>
         <li><a href="#suggestions">Room Planner</a></li>
         <li><a href="#gallery">Gallery</a></li>
-        <li><a href="#gallery">Inspiration</a></li>
         <li><a href="#assistant">AI Assistant</a></li>
-        <li><a href="#contact">Contact</a></li>
+        <li><a href="#" id="login-btn">Sign In</a></li>
+        <li><button id="theme-toggle" class="icon-btn" aria-label="Toggle dark mode">🌙</button></li>
       </ul>
     </nav>
   </header>
@@ -31,22 +30,72 @@
 
   <!-- Input -->
   <section class="input-section" id="suggestions">
-    <label for="room">Choose a room:</label>
-    <select id="room">
-      <option value="living">Living Room</option>
-      <option value="bedroom">Bedroom</option>
-      <option value="kitchen">Kitchen</option>
-      <option value="office">Office</option>
-    </select>
-    <button type="button" onclick="getSuggestion()">Suggest Interior</button>
-    <button type="button" onclick="showGallery()">Show Gallery</button>
+    <div class="filters">
+      <div class="filter-group">
+        <label for="room">Choose a room:</label>
+        <select id="room">
+          <option value="living">Living Room</option>
+          <option value="bedroom">Bedroom</option>
+          <option value="kitchen">Kitchen</option>
+          <option value="office">Office</option>
+        </select>
+      </div>
+      <div class="filter-group">
+        <label for="style">Design Style:</label>
+        <select id="style">
+          <option value="minimalist">Minimalist</option>
+          <option value="bohemian">Bohemian</option>
+          <option value="industrial">Industrial</option>
+          <option value="scandinavian">Scandinavian</option>
+          <option value="midcentury">Mid-Century Modern</option>
+        </select>
+      </div>
+      <div class="filter-group">
+        <label for="color">Color Palette:</label>
+        <select id="color">
+          <option value="warm">Warm Tones</option>
+          <option value="cool">Cool Tones</option>
+          <option value="monochromatic">Monochromatic</option>
+          <option value="pastel">Pastels</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="upload-area" id="upload-area">
+      <p>📁 Drag & Drop your room photo here or <span class="upload-link">Browse</span></p>
+      <input type="file" id="room-upload" hidden accept="image/*">
+    </div>
+
+    <button type="button" id="suggest-btn" onclick="getSuggestion()">✨ Generate Design</button>
+    <button type="button" class="secondary" onclick="showGallery()">View Inspiration Gallery</button>
   </section>
 
   <!-- Output -->
-  <section class="output-section" id="gallery">
-    <h2>Suggestion:</h2>
-    <p id="suggestion-text">Your AI suggestion will appear here...</p>
-    <div id="suggestion-image"></div>
+  <section class="output-section" id="gallery" style="display: none;">
+    <div class="output-header">
+      <h2>Your AI Design</h2>
+      <button id="save-design-btn" class="icon-btn outline">❤️ Save Design</button>
+    </div>
+    
+    <div id="loading-state" style="display:none;">
+      <div class="spinner"></div>
+      <p>AI is generating your dream space...</p>
+    </div>
+
+    <div id="results-content">
+      <p id="suggestion-text">Your AI suggestion will appear here...</p>
+      
+      <div class="palette-container">
+        <div id="color-palette" class="color-palette"></div>
+      </div>
+
+      <div id="suggestion-image"></div>
+      
+      <div class="shoppable-container">
+        <h3>Shop the Look</h3>
+        <div id="shoppable-items" class="shoppable-items"></div>
+      </div>
+    </div>
   </section>
 
   <section class="assistant-section" id="assistant">
