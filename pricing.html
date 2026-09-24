@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Smart Interiors | AI Assistant</title>
+  <title>Smart Interiors | Pricing</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -19,33 +19,69 @@
         <li><a href="index.html">Home</a></li>
         <li><a href="planner.html">Room Planner</a></li>
         <li><a href="gallery.html">Gallery</a></li>
-        <li><a href="assistant.html" style="color: var(--primary);">AI Assistant</a></li>
-        <li><a href="pricing.html">Pricing</a></li>
+        <li><a href="assistant.html">AI Assistant</a></li>
+        <li><a href="pricing.html" style="color: var(--primary);">Pricing</a></li>
         <li><a href="#" id="login-btn" class="nav-btn">Sign In</a></li>
         <li><button id="theme-toggle" class="icon-btn" aria-label="Toggle dark mode">🌙</button></li>
       </ul>
     </nav>
   </header>
 
-  <!-- Assistant -->
-  <section class="assistant-section animate-on-scroll" id="assistant">
-    <div class="assistant-heading">
-      <p class="eyebrow" style="color: var(--primary); font-weight: 700; text-transform: uppercase; letter-spacing: 1px; font-size: 0.85rem; margin-bottom: 0.5rem;">Design companion</p>
-      <h2>Ask your AI interior assistant</h2>
-      <p>Get practical ideas for your space, from colors and layouts to lighting and storage.</p>
-    </div>
-    <div class="assistant-panel">
-      <div class="chat-messages" id="chat-messages" role="log" aria-live="polite" aria-label="AI assistant conversation"></div>
-      <div class="quick-prompts" aria-label="Suggested questions">
-        <button type="button" data-question="What colors would work well?">Color ideas</button>
-        <button type="button" data-question="How can I improve the lighting?">Lighting tips</button>
-        <button type="button" data-question="How can I make the room feel bigger?">Make it feel bigger</button>
+  <!-- Pricing Section -->
+  <section class="pricing-section animate-on-scroll">
+    <h2 style="font-size: 2.5rem; margin-bottom: 1rem;">Simple, transparent pricing</h2>
+    <p style="color: #64748b; font-size: 1.1rem; margin-bottom: 4rem;">Choose the perfect plan for your interior design needs.</p>
+    
+    <div class="pricing-grid">
+      <!-- Basic -->
+      <div class="price-card tilt-card">
+        <div class="tilt-card-inner">
+          <h3 style="margin-top: 0;">Basic</h3>
+          <p style="color: #64748b;">Perfect for a quick room refresh.</p>
+          <div class="price">Free<span> / forever</span></div>
+          <ul class="features">
+            <li>5 AI renders per month</li>
+            <li>Basic style selection</li>
+            <li>Standard definition downloads</li>
+          </ul>
+          <button class="secondary price-btn">Get Started</button>
+        </div>
       </div>
-      <form class="chat-form" id="assistant-form">
-        <label class="sr-only" for="assistant-input">Ask the AI interior assistant</label>
-        <input id="assistant-input" type="text" placeholder="Ask about your room..." autocomplete="off" required>
-        <button type="submit">Ask assistant</button>
-      </form>
+      
+      <!-- Pro -->
+      <div class="price-card popular tilt-card">
+        <div class="popular-badge">Most Popular</div>
+        <div class="tilt-card-inner">
+          <h3 style="margin-top: 0;">Pro</h3>
+          <p style="color: #64748b;">For homeowners and enthusiasts.</p>
+          <div class="price">$19<span> / month</span></div>
+          <ul class="features">
+            <li>Unlimited AI renders</li>
+            <li>All design styles & palettes</li>
+            <li>Shoppable furniture links</li>
+            <li>High definition downloads</li>
+            <li>Priority AI Assistant access</li>
+          </ul>
+          <button class="price-btn">Upgrade to Pro</button>
+        </div>
+      </div>
+      
+      <!-- Studio -->
+      <div class="price-card tilt-card">
+        <div class="tilt-card-inner">
+          <h3 style="margin-top: 0;">Studio</h3>
+          <p style="color: #64748b;">For professional interior designers.</p>
+          <div class="price">$49<span> / month</span></div>
+          <ul class="features">
+            <li>Everything in Pro</li>
+            <li>Commercial usage rights</li>
+            <li>4K resolution downloads</li>
+            <li>Custom brand watermarks</li>
+            <li>API Access</li>
+          </ul>
+          <button class="secondary price-btn">Contact Sales</button>
+        </div>
+      </div>
     </div>
   </section>
 

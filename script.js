@@ -55,8 +55,11 @@ function getSuggestion() {
     renderPalette(colors);
     renderProducts(products);
     
+    // Re-initialize tilt for new elements
+    initTilt();
+    
     if(gallery) gallery.scrollIntoView({ behavior: "smooth", block: "start" });
-  }, 1200);
+  }, 2000); // 2 second delay to show off skeleton loader
 }
 
 function renderImages(imagePaths, altPrefix, targetId) {
@@ -66,11 +69,15 @@ function renderImages(imagePaths, altPrefix, targetId) {
   const gallery = document.createElement("div");
   gallery.className = "image-gallery";
   imagePaths.forEach((path, index) => {
+    const wrapper = document.createElement("div");
+    wrapper.className = "tilt-card";
     const image = document.createElement("img");
     image.src = path;
     image.alt = `${altPrefix} ${index + 1}`;
     image.loading = "lazy";
-    gallery.appendChild(image);
+    image.className = "tilt-card-inner";
+    wrapper.appendChild(image);
+    gallery.appendChild(wrapper);
   });
   container.replaceChildren(gallery);
 }
@@ -95,15 +102,18 @@ function renderProducts(products) {
   if(!container) return;
   container.innerHTML = "";
   products.forEach(p => {
+    const wrapper = document.createElement("div");
+    wrapper.className = "tilt-card";
     const card = document.createElement("div");
-    card.className = "shop-card";
+    card.className = "shop-card tilt-card-inner";
     card.innerHTML = `
       <img src="${p.img}" alt="${p.name}">
       <h4>${p.name}</h4>
       <p>${p.price}</p>
       <button onclick="showToast('Added ${p.name} to cart!')">Buy Now</button>
     `;
-    container.appendChild(card);
+    wrapper.appendChild(card);
+    container.appendChild(wrapper);
   });
 }
 
@@ -117,6 +127,7 @@ function loadGalleryPage() {
     "https://images.unsplash.com/photo-1615874959474-2d3d7e1a8f8a?w=800&h=600&fit=crop"
   ];
   renderImages(galleryImages, "Gallery Interior", "gallery-container");
+  initTilt();
 }
 
 // Assistant Logic
@@ -227,9 +238,55 @@ function initUpload() {
   });
 }
 
+function initFAQ() {
+  const faqQuestions = document.querySelectorAll('.faq-question');
+  faqQuestions.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const item = btn.parentElement;
+      const isActive = item.classList.contains('active');
+      document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('active'));
+      if (!isActive) item.classList.add('active');
+    });
+  });
+}
+
+function initTilt() {
+  const cards = document.querySelectorAll('.tilt-card');
+  cards.forEach(card => {
+    card.addEventListener('mousemove', e => {
+      const rect = card.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      const centerX = rect.width / 2;
+      const centerY = rect.height / 2;
+      const rotateX = ((y - centerY) / centerY) * -10; 
+      const rotateY = ((x - centerX) / centerX) * 10;
+      card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+      
+      const inner = card.querySelector('.tilt-card-inner');
+      if(inner) {
+        inner.style.transform = 'translateZ(30px)';
+      }
+    });
+    
+    card.addEventListener('mouseleave', () => {
+      card.style.transform = `perspective(1000px) rotateX(0deg) rotateY(0deg)`;
+      card.style.transition = 'transform 0.5s ease';
+      const inner = card.querySelector('.tilt-card-inner');
+      if(inner) inner.style.transform = 'translateZ(0px)';
+    });
+    
+    card.addEventListener('mouseenter', () => {
+      card.style.transition = 'none';
+    });
+  });
+}
+
 document.addEventListener("DOMContentLoaded", () => {
   initTheme();
   initScrollAnimations();
+  initFAQ();
+  initTilt();
   
   // Mobile menu
   const mobileMenuBtn = document.getElementById("mobile-menu-btn");

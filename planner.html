@@ -20,6 +20,7 @@
         <li><a href="planner.html" style="color: var(--primary);">Room Planner</a></li>
         <li><a href="gallery.html">Gallery</a></li>
         <li><a href="assistant.html">AI Assistant</a></li>
+        <li><a href="pricing.html">Pricing</a></li>
         <li><a href="#" id="login-btn" class="nav-btn">Sign In</a></li>
         <li><button id="theme-toggle" class="icon-btn" aria-label="Toggle dark mode">🌙</button></li>
       </ul>
@@ -77,8 +78,16 @@
     </div>
     
     <div id="loading-state" style="display:none;">
-      <div class="spinner"></div>
-      <p>AI is generating your dream space...</p>
+      <div class="skeleton-wrapper">
+        <div class="skeleton skel-title"></div>
+        <div class="skeleton skel-text"></div>
+        <div class="skeleton skel-img"></div>
+        <div class="skel-grid">
+          <div class="skeleton skel-card"></div>
+          <div class="skeleton skel-card"></div>
+          <div class="skeleton skel-card"></div>
+        </div>
+      </div>
     </div>
 
     <div id="results-content">
