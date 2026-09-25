@@ -131,51 +131,126 @@ function loadGalleryPage() {
 }
 
 // Assistant Logic
-const assistantResponses = {
-  colors: {
-    living: "Try warm white walls with olive, terracotta, or muted navy accents. Keep the largest furniture neutral.",
-    bedroom: "Use calm tones such as soft sage, dusty blue, or warm white. Add contrast with one darker textile.",
-    kitchen: "Pair warm white or pale greige cabinets with natural wood and one restrained accent color.",
-    office: "Choose a quiet base like warm white or light gray, then add one focused accent such as forest green."
-  },
-  lighting: "Layer three types of light: bright overhead, a task light, and a warm lamp for the evening.",
-  bigger: "Keep a clear walking path, use furniture with visible legs, and a large mirror opposite a window.",
-  storage: "Use the vertical space first: tall shelving, wall hooks, and storage baskets keep the floor open.",
-  budget: "Start with layout and lighting before buying decor. A new rug or bulbs create huge impact."
-};
+const SYSTEM_PROMPT = "You are a professional AI interior design assistant for 'Smart Interiors'. Provide helpful, creative, and concise interior design advice, layout tips, color palettes, and furniture suggestions based on user queries. Keep your answers brief (1-3 paragraphs max). Use markdown formatting for bolding (**text**) or italics (*text*).";
+let chatHistory = [];
 
-function getAssistantResponse(question) {
-  const roomEl = document.getElementById("room");
-  const room = roomEl ? roomEl.value : "living";
-  const normalizedQuestion = question.toLowerCase();
+async function getGeminiResponse(question) {
+  let apiKey = localStorage.getItem('gemini_api_key');
+  if (!apiKey) {
+    apiKey = prompt("To use the real AI assistant, please enter your Gemini API Key.\n\n(You can get a free one from Google AI Studio. Your key will only be stored locally in your browser.)", "");
+    if (apiKey) {
+      localStorage.setItem('gemini_api_key', apiKey.trim());
+    } else {
+      return "API Key is required to use the real AI assistant. Please refresh and provide a key, or try again.";
+    }
+  }
 
-  if (normalizedQuestion.includes("color") || normalizedQuestion.includes("paint")) return assistantResponses.colors[room] || assistantResponses.colors.living;
-  if (normalizedQuestion.includes("light") || normalizedQuestion.includes("bright")) return assistantResponses.lighting;
-  if (normalizedQuestion.includes("bigger") || normalizedQuestion.includes("small")) return assistantResponses.bigger;
-  if (normalizedQuestion.includes("storage") || normalizedQuestion.includes("organize")) return assistantResponses.storage;
-  if (normalizedQuestion.includes("budget") || normalizedQuestion.includes("cheap")) return assistantResponses.budget;
+  const apiHistory = chatHistory.map(msg => ({
+    role: msg.sender === "user" ? "user" : "model",
+    parts: [{ text: msg.message }]
+  }));
+  
+  // Use a fallback body if system_instruction is not supported well in the browser fetch for this specific model version
+  const requestBody = {
+    contents: [...apiHistory, { role: "user", parts: [{ text: (apiHistory.length === 0 ? `System: ${SYSTEM_PROMPT}\n\n` : "") + question }] }]
+  };
 
-  return `For your space, start with a focal point and good lighting. Want help with colors, lighting, storage, or budget?`;
+  try {
+    const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(requestBody)
+    });
+
+    if (!response.ok) {
+      if (response.status === 400 || response.status === 403) {
+         localStorage.removeItem('gemini_api_key');
+         return "Invalid or expired API Key. I have cleared it. Please refresh and try entering it again.";
+      }
+      throw new Error(`API Error: ${response.status}`);
+    }
+
+    const data = await response.json();
+    if (data.candidates && data.candidates.length > 0) {
+       return data.candidates[0].content.parts[0].text;
+    } else {
+       return "I'm sorry, I couldn't generate a response.";
+    }
+  } catch (error) {
+    console.error("Gemini API Error:", error);
+    return "Sorry, I'm having trouble connecting to my AI brain right now. Please try again later. (" + error.message + ")";
+  }
 }
 
-function addChatMessage(message, sender) {
+function addChatMessage(message, sender, isMarkdown = false) {
   const chatMessages = document.getElementById("chat-messages");
   if(!chatMessages) return;
   const messageElement = document.createElement("div");
   messageElement.className = `chat-message ${sender}`;
-  messageElement.textContent = message;
+  
+  if (isMarkdown && sender === 'assistant') {
+    // Basic markdown parsing for bold, italics, and line breaks
+    let htmlMsg = message
+        .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+        .replace(/\*(.*?)\*/g, '<em>$1</em>')
+        .replace(/\n/g, '<br>');
+    messageElement.innerHTML = htmlMsg;
+  } else {
+    messageElement.textContent = message;
+  }
+  
   chatMessages.appendChild(messageElement);
-  messageElement.scrollIntoView({ behavior: "smooth", block: "nearest" });
+  chatMessages.scrollTop = chatMessages.scrollHeight; // Auto-scroll to bottom
 }
 
-function askAssistant(question) {
+async function askAssistant(question) {
   const trimmedQuestion = question.trim();
   if (!trimmedQuestion) return;
+  
+  // Add user message to UI
   addChatMessage(trimmedQuestion, "user");
   
-  setTimeout(() => {
-    addChatMessage(getAssistantResponse(trimmedQuestion), "assistant");
-  }, 600);
+  // Show typing indicator
+  const typingId = "typing-" + Date.now();
+  const chatMessages = document.getElementById("chat-messages");
+  const typingEl = document.createElement("div");
+  typingEl.className = "chat-message assistant typing-indicator";
+  typingEl.id = typingId;
+  typingEl.innerHTML = "<span></span><span></span><span></span>";
+  chatMessages.appendChild(typingEl);
+  chatMessages.scrollTop = chatMessages.scrollHeight;
+
+  const inputEl = document.getElementById("assistant-input");
+  const submitBtn = document.querySelector("#assistant-form button[type='submit']");
+  if(inputEl) inputEl.disabled = true;
+  if(submitBtn) submitBtn.disabled = true;
+
+  try {
+    const responseText = await getGeminiResponse(trimmedQuestion);
+    
+    // Remove typing indicator
+    const tEl = document.getElementById(typingId);
+    if(tEl) tEl.remove();
+    
+    // Add to history (only if it's a real response, not an API error, but simple enough to just push it)
+    if (!responseText.includes("API Key is required") && !responseText.includes("Invalid or expired API Key")) {
+      chatHistory.push({ sender: "user", message: trimmedQuestion });
+      chatHistory.push({ sender: "assistant", message: responseText });
+    }
+    
+    // Add assistant message to UI
+    addChatMessage(responseText, "assistant", true);
+  } catch(e) {
+    const tEl = document.getElementById(typingId);
+    if(tEl) tEl.remove();
+    addChatMessage("Error connecting to AI.", "assistant");
+  } finally {
+    if(inputEl) {
+      inputEl.disabled = false;
+      inputEl.focus();
+    }
+    if(submitBtn) submitBtn.disabled = false;
+  }
 }
 
 // UI Utilities
